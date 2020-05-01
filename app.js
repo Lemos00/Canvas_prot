@@ -21,11 +21,19 @@ document.querySelectorAll("[data-tool]").forEach(
             switch(selectedTool){
                 //activate shape or line widths group
                 case Tool.TOOL_SQUARE:
+                    console.log(Tool.TOOL_SQUARE)
+                    break;
                 case Tool.TOOL_TRIANGLE:
+                    console.log(Tool.TOOL_TRIANGLE)
+                    break;
                 case Tool.TOOL_PAINT_BUCKET:
+                    console.log(Tool.TOOL_PAINT_BUCKET)
+                    break;
                 case Tool.TOOL_ERASER:
-                case Tool.TOOL_BRUSH:
+                    console.log(Tool.TOOL_ERASER)
+                    break;
                 case Tool.TOOL_PENCIL:
+                    console.log(Tool.TOOL_PENCIL)
                     //make pencil shapes visible
                     document.querySelector(".group.for-shapes").style = "display: block;";
                     //make brush sizes invisible
@@ -34,6 +42,7 @@ document.querySelectorAll("[data-tool]").forEach(
                     break;
 
                 case Tool.TOOL_BRUSH:
+                    console.log(Tool.TOOL_PENCIL)
                     //make pencil shapes invisible
                     document.querySelector(".group.for-shapes").style.display = "none";
                     //make brush selection visible
