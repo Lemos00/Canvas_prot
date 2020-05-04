@@ -2,6 +2,7 @@ import Point from './point.model.js';
 import {TOOL_CIRCLE, TOOL_LINE, TOOL_BRUSH, TOOL_ERASER, TOOL_PAINT_BUCKET, TOOL_PENCIL, TOOL_SQUARE, TOOL_TRIANGLE} from './tool.js'; 
 
 import {getMouseCoordsOnCanvas, findDistance} from './utility.js';
+import Fill from './fill.class.js';
 
 
 export default class Paint{
@@ -27,8 +28,6 @@ export default class Paint{
     }
 
     set selectedColor(color){
-
-
         this._color = color;
         this.context.strokeStyle = this._color;
     }
@@ -53,6 +52,10 @@ export default class Paint{
             //begin path again and again for good quality
             this.context.beginPath();
             this.context.moveTo(this.startPos.x, this.startPos.y);
+
+        }else if (this.tool == TOOL_PAINT_BUCKET){
+            //in this case, we will implement the flood fill algorithm
+            new Fill(this.canvas, this.startPos, this._color);
         }
 
     }
@@ -85,6 +88,8 @@ export default class Paint{
         document.onmouseup = null;
     }
     
+
+    //shape drawing functions
     drawShape(){
         
         this.context.putImageData(this.saveData, 0, 0);

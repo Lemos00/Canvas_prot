@@ -6,7 +6,7 @@ var paint = new Paint("canvas");
 paint.activeTool = TOOL_LINE; // IT WILL DEFAULT THE TOOL TO THE SQUARE
 paint.lineWidth = 1; // determine lineWidth here
 paint.brushSize = 4;
-paint.selectedTool = "#000000";
+paint.selectedColor = "#000000";
 
 paint.init();
 
