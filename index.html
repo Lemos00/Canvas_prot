@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content = "ie-edge">
     <title>Painting with Canvas</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="canvas.css">
 </head>
 <body>
     <div class = "toolbox left">
@@ -35,6 +35,10 @@
             <div class = "item" data-tool = "triangle" title="Triangle Tool">
                 <img src="images/triangle-icon.png" />
             </div>
+
+            <div class = "item" data-tool = "select-area" title="Select Area Tool">
+                <img src="images/select-area-icon.png" />
+            </div>
         </div>
 
         <div class = "group tools">
@@ -53,9 +57,14 @@
             <div class = "item" data-tool = "paint-bucket" title="Paint Bucket Tool">
                 <img src="images/paint-bucket-icon.png" />
             </div>
+
+            <div class = "item" data-tool = "drag-drop" title="Drag Drop Tool">
+                <img src="images/drag-drop-icon.png" />
+            </div>
+
         </div>
         <div class = "group linewidths for-shapes" style = "display: block;">
-            <div class = "item active" data-line-width = "1" title = "1 Pixel">
+            <div class = "item active" data-line-width = "2.5" title = "2.5 Pixel">
                 <div class = "linewidth" style = "width: 1px;height: 1px"></div>
             </div>
 
@@ -102,7 +111,7 @@
 
     </div>
 
-    <canvas id = "canvas" width = "640" height = "480"></canvas>
+    <canvas id = "canvas" width = "800px" height = "640px"></canvas>
 
     <div class = "toolbox right">
         <div class = "group swatches">
@@ -126,14 +135,14 @@
                 <div class = "swatch" style = "background-color: green; "></div>
             </div>
             
-            <!--
-            <div class = "item">
-                <input type="color">
+        </div>
+        <div class = "group drag">
+            <div class = "item active" data-image = "images/images.png">
+                <img id = "check" src="images/images.png" />
             </div>
-            -->
         </div>
     </div>
 </body>
 </html>
 
-<script src="app.js" type="module"></script>
+<script src="/canvas.js" type="module"></script>

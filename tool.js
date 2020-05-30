@@ -6,5 +6,6 @@ export const TOOL_BRUSH = "brush";
 export const TOOL_ERASER = "eraser";
 export const TOOL_LINE = "line";
 export const TOOL_CIRCLE = "circle";
-
+export const TOOL_DRAGDROP = "drag-drop";
+export const TOOL_SELECTAREA = "select-area";
     
