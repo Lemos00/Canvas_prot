@@ -13,13 +13,17 @@ export default class Paint{
         this.canvas.style.cursor = "crosshair";
         
         this.undoStack = [];
-        this.undoLimit = 25; //limit for the stack
+        this.redoStack = [];
+        this.undoLimit = 40; //limit for the stack
 
         // will be used on the drag and drop functionalities
         this.startingPoint = {x: 0, y: 0};
         this.endPoint = {x: 0, y: 0};
 
-        this.numSquares = 0;
+        this.numSquares = false;
+        this.rectDeleted = false;
+
+        this.rectData;
     }
 
 
@@ -54,13 +58,18 @@ export default class Paint{
     }
 
     onMouseDown(e){
+        
+
+        if (this.numSquares == true && this.undoStack.length > 0) {
+            this.numSquares = false;
+            this.undoPaint();
+        }
         // store the image so that we can replicate it with every mouse move.
         this.saveData = this.context.getImageData(0, 0, this.canvas.clientWidth, this.canvas.height);
-
+        this.context.putImageData(this.saveData, 0, 0);
         //undo portion (2L)
         if(this.undoStack.length >= this.undoLimit) this.undoStack.shift();
         this.undoStack.push(this.saveData);
-        console.log(this.undoStack);
 
 
         this.canvas.onmousemove = e => this.onMouseMove(e);
@@ -80,22 +89,17 @@ export default class Paint{
             this.context.clearRect(this.startPos.x, this.startPos.y,
                 this._brushSize, this._brushSize);
         }else if (this.tool == TOOL_DRAGDROP){
-            this.context.drawImage(this._image, this.startPos.x, this.startPos.y);
+            this.context.putImageData(this.rectData, this.startingPoint.x, this.startingPoint.y, this.startPos.x, this.startPos.y,
+                this.rectData.width, this.rectData.height);
             
-        }else if (this.tool == TOOL_SELECTAREA){    
-            if (this.numSquares == 1){
-                this.context.putImageData(this.undoStack[this.undoStack.length - 2], 0, 0);
-                this.undoStack.splice(this.undoStack.length - 2, 1);
-                console.log(this.undoStack);
-            }
         }
 
     }
 
 
     onMouseMove(e){
-        this.currentPos = getMouseCoordsOnCanvas(e, this.canvas);
 
+        this.currentPos = getMouseCoordsOnCanvas(e, this.canvas);
         // loop for every shape at the user's disposal
         switch(this.tool){
             case TOOL_SELECTAREA:
@@ -128,10 +132,8 @@ export default class Paint{
         if (this.tool == TOOL_SELECTAREA){
             this.context.setLineDash([]);
             this.context.lineWidth = this._lineWidth;
-            if (this.numSquares == 0){
-                this.numSquares += 1;
-            }else{
-                this.numSquares = 1;
+            if (this.numSquares == false){
+                this.numSquares = true;
             }
         }
     }
@@ -141,7 +143,7 @@ export default class Paint{
     drawShape(){
         
         this.context.putImageData(this.saveData, 0, 0);
-
+        this.context.lineCap = "round";
         this.context.beginPath();
 
 
@@ -168,14 +170,12 @@ export default class Paint{
         }else if (this.tool = TOOL_SELECTAREA){
             this.context.lineWidth = 1;
             this.context.setLineDash([10, 20]);
-
             this.context.rect(this.startPos.x, this.startPos.y, this.currentPos.x - this.startPos.x, this.currentPos.y - this.startPos.y);
-            
             this.startingPoint.x = this.startPos.x;
             this.startingPoint.y = this.startPos.y;
             
-            this.endPoint.x = this.currentPos.x - this.startPos.x;
-            this.endPoint.y = this.currentPos.y - this.startPos.y;
+            this.endPoint.x = this.currentPos.x;
+            this.endPoint.y = this.currentPos.y;
 
         }
 
@@ -189,13 +189,39 @@ export default class Paint{
     }
 
     undoPaint(){
+        this.secondSave = this.context.getImageData(0, 0, this.canvas.clientWidth, this.canvas.height);
+        this.numSquares = this.numSquares && false;
+
         if(this.undoStack.length > 0){
+            console.log(this.secondSave);
+            this.redoStack.push(this.secondSave);
             this.context.putImageData(this.undoStack[this.undoStack.length - 1], 0, 0);
             this.undoStack.pop();
         }else{
             alert("No drawing to be undone");
         }
+
     }
 
+    
+    redoPaint(){
+        this.numSquares = this.numSquares && false; // careful to not be a boolean value
+
+        if(this.redoStack.length > 0){
+            this.undoStack.push(this.secondSave);
+            this.context.putImageData(this.redoStack[this.redoStack.length - 1], 0, 0);
+
+            this.redoStack.pop();
+        }else{
+            alert("No drawing to be REdone");
+        }
+
+        console.log(this.redoStack)
+
+    }
+
+    getRectImage(data){
+        this.rectData = data;
+    }
 
 }
